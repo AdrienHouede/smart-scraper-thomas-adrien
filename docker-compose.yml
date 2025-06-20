@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  
+  db:
+    image: mysql:8
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: terrasses
+      MYSQL_DATABASE: terrasses_db
+      MYSQL_USER: terrasses
+      MYSQL_PASSWORD: terrasses
+    ports:
+      - "3306:3306"
+    networks:
+      - appnet
+  backend:
+    build: ./backend
+    container_name: flask-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - FLASK_ENV=development
+      - DB_HOST=db
+      - DB_NAME=terrasses_db
+      - DB_USER=terrasses
+      - DB_PASSWORD=terrasses
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - appnet
+
+  frontend:
+    build: ./frontend
+    container_name: react-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - appnet
+
+networks:
+  appnet:
