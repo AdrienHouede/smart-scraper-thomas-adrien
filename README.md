@@ -1,81 +1,115 @@
-# 🎓 Projet de Scraping - Données ouvertes de Paris
+# 📊 Terrasses à Paris - Scraping OpenData
 
-## 📌 Source des données
-
-Ce projet utilise les données disponibles sur le portail officiel de l’**Open Data de la Ville de Paris** :  
-🔗 [https://opendata.paris.fr](https://opendata.paris.fr)
-
-Le site propose un large éventail de jeux de données publics concernant la ville de Paris (urbanisme, transports, culture, environnement, etc.), accessibles via une interface web ou des API.
+Projet full-stack de collecte et visualisation de données issues de l’Open Data de la Ville de Paris, avec un backend en Flask, une base MySQL, et une interface React.
 
 ---
 
-## 📜 Licence d’utilisation
+## 🧠 Objectif du projet
 
-Les données sont publiées sous la **Licence Ouverte 2.0** d’Etalab.
+Développer une application complète permettant de :
 
-> **Extrait de la Licence Ouverte 2.0** :
->
-> Vous êtes libres de :
-> - **Reproduire, copier, adapter, modifier, extraire, réutiliser** et redistribuer les informations,
-> - Y compris à des fins **commerciales**.
->
-> Sous réserve de :
-> - **Mentionner la paternité** de l’information (source, date de dernière mise à jour, etc.),
-> - Ne pas induire en erreur les tiers quant au contenu, à la source ou à la date des données.
-
-🔗 [Texte complet de la licence - Licence Ouverte 2.0 (Etalab)](https://www.etalab.gouv.fr/licence-ouverte-open-licence)
+- Collecter automatiquement des données publiques depuis le site [https://opendata.paris.fr](https://opendata.paris.fr),
+- Les stocker dans une base de données relationnelle,
+- Les exposer via une API REST,
+- Les afficher et filtrer sur une interface web responsive.
 
 ---
 
-## ✅ Légalité de la collecte
+## 🛠️ Technologies utilisées
 
-La collecte de données via scraping ou via les API de [opendata.paris.fr](https://opendata.paris.fr) est **légale**, car :
-
-- Les données sont **publiquement accessibles** et proposées à des fins de réutilisation.
-- Le site promeut explicitement leur **réutilisation libre** via la Licence Ouverte.
-- Le projet respecte les **conditions d’utilisation**, notamment :
-  - La mention de la **source**,
-  - L’absence de modification trompeuse du contenu,
-  - Une utilisation **responsable** du scraping (pas de surcharge du site, respect des limites d’accès).
+- **Python 3**, **Flask**, **SQLAlchemy**
+- **MySQL** via **Docker**
+- **React.js** pour le frontend
+- **Docker & Docker Compose** pour le déploiement
+- **API OpenData Paris**
 
 ---
 
-## Fonctionnalités réalisées
+## 🗂️ Arborescence du projet
 
-### Backend (Flask + SQLAlchemy + MySQL Docker)
+terrasses-paris/
+├── backend/
+│ ├── scraper.py
+│ ├── app.py
+│ ├── models.py
+│ ├── requirements.txt
+│ └── Dockerfile
+├── frontend/
+│ ├── public/
+│ ├── src/
+│ ├── package.json
+│ └── Dockerfile
+├── docker-compose.yml
+└── README.md
 
-- Mise en place d’une base MySQL dockerisée avec Docker Compose.  
-- Création d’un schéma `terrasses` avec les colonnes :  
-  `id`, `typologie`, `adresse`, `arrondissement`, `nom_enseigne`, `longueur`, `largeur`, `lien_affichette`.  
-- Script de scraping `scraper.py` qui interroge l’API OpenData Paris pour récupérer les données terrasses et créer des objets SQLAlchemy.  
-- Insertion des données dans la base via SQLAlchemy.  
-- API REST avec Flask proposant :  
-  - `GET /api/data` : renvoie toutes les terrasses.  
-  - `GET /api/data/<filtre>?value=xxx` : filtre par champ (ex: arrondissement).  
-  - `POST /api/scrape` : déclenchement manuel du scraper.  
-- Gestion des erreurs et ajout de CORS pour permettre l’accès depuis un front web.
-
-### Frontend (React.js)
-
-- Interface web React minimaliste et responsive.  
-- Affichage dynamique des données dans un tableau HTML.  
-- Filtrage par arrondissement via un champ de recherche.  
-- Requêtes fetch vers l’API Flask pour récupérer les données.  
-- Design simple avec styles inline et adaptabilité mobile.
 
 ---
 
-## Architecture et lancement
+## 🚀 Fonctionnalités
 
-### Docker
+### ✅ Backend (Flask + MySQL)
 
-- `docker-compose.yml` configure :  
-  - MySQL  
-  - Backend Flask (à ajouter si dockerisé)  
-  - Frontend React (optionnel)
+- Scraping automatique via l’API OpenData Paris
+- ORM avec SQLAlchemy
+- API REST :
+  - `GET /api/data` – liste complète
+  - `GET /api/data/<filtre>?value=xxx` – filtrage dynamique
+  - `POST /api/scrape` – relance manuelle du scraper
+- Gestion des erreurs + CORS
 
-### Lancement manuel
+### ✅ Frontend (React)
 
-- Lancer MySQL avec Docker :  
-  ```bash
-  docker-compose up -d mysql
+- Affichage sous forme de tableau responsive
+- Filtre par arrondissement
+- Requête fetch vers l’API Flask
+- Design minimaliste adapté au mobile
+
+### ✅ Dockerisation
+
+- Conteneurisation du backend, frontend et base de données
+- Lancement complet via Docker Compose
+
+---
+
+## ⚙️ Installation
+
+### Prérequis
+
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+### Étapes
+
+1. Cloner le projet :
+```bash
+git clone https://github.com/AdrienHouede/smart-scraper-thomas-adrien.git
+```
+
+2. Lancer l'infrastructure :
+```bash
+docker-compose up -d --build
+```
+
+## 📦 Exemple de requêtes
+
+### GET /api/data
+➤ Retourne toutes les terrasses enregistrées.
+
+### GET /api/data/arrondissement?value=75018
+➤ Retourne les terrasses dans le 18e arrondissement.
+
+### POST /api/scrape
+➤ Déclenche le scraping (à utiliser avec précaution).
+
+## 📄 Licence et données
+Les données utilisées proviennent du portail OpenData Paris.
+Licence : Licence Ouverte 2.0 – Etalab
+➡️ [Consulter la licence](https://www.etalab.gouv.fr/licence-ouverte-open-licence)
+
+## 📸 Captures d’écran
+![Capture d'écran de l'interface](/screenshots/react.png)
+![Capture d'écran de l'API](/screenshots/flask.png)
+
+## ✨ Auteurs
+- Adrien HOUEDE
+- Thomas BIZET

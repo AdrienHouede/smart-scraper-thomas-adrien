@@ -9,5 +9,6 @@ CREATE TABLE IF NOT EXISTS terrasses (
     nom_enseigne VARCHAR(255),
     longueur FLOAT,
     largeur FLOAT,
-    lien_affichette TEXT
+    lien_affichette TEXT,
+    UNIQUE (nom_enseigne, adresse, arrondissement)
 );
