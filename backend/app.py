@@ -4,13 +4,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, Terrasse
 from scraper import fetch_terrasses
+import os
 
 app = Flask(__name__)
 CORS(app)
 
-DB_USER = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "root")
-DB_HOST = os.getenv("DB_HOST", "db") 
+DB_USER = os.getenv("DB_USER", "terrasses")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "terrasses")
+DB_HOST = os.getenv("DB_HOST", "db")
 DB_NAME = os.getenv("DB_NAME", "terrasses_db")
 
 DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
@@ -77,7 +78,7 @@ def get_data_filtered(filtre):
 def trigger_scrape():
     try:
         session = Session()
-        terrasses = fetch_terrasses(limit=50)
+        terrasses = fetch_terrasses(500)
         session.bulk_save_objects(terrasses)
         session.commit()
         session.close()

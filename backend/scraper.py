@@ -2,6 +2,7 @@ import requests
 from models import Terrasse
 
 def fetch_terrasses(limit=100):
+    print("scraper")
     url = "https://opendata.paris.fr/api/records/1.0/search/"
     params = {
         "dataset": "terrasses-autorisations",
