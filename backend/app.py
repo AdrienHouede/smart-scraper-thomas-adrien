@@ -6,9 +6,14 @@ from models import Base, Terrasse
 from scraper import fetch_terrasses
 
 app = Flask(__name__)
-CORS(app)  # Autoriser CORS pour toutes les origines
+CORS(app)
 
-DATABASE_URL = "mysql+pymysql://user:userpass@localhost:3306/paris_scraping"
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "root")
+DB_HOST = os.getenv("DB_HOST", "db") 
+DB_NAME = os.getenv("DB_NAME", "terrasses_db")
+
+DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 engine = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=engine)
 Base.metadata.create_all(engine)
